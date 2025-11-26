@@ -1,9 +1,13 @@
 '''
 ЩО ТРЕБА ЩЕ ЗРОБИТИ
 Найближчим часом:
-1) генератор рандомних графів
+1)ТЕСТИ
 2) МОЖЛИВО якось об'єднати ці два класи в один, або зробити їх дітьми якогось загального класу Graph
 '''
+
+import networkx as nx
+import matplotlib.pyplot as plt
+import random
 
 # graph[0].append(int) --- взяти першу ноду графа і пов'язати її з іншою
 class GraphList:
@@ -22,9 +26,34 @@ class GraphList:
         self.sccomp_count = 0
 
     def addEdge(self, a: int, b: int):
-        if b not in graph[a]:
+        if b not in self.graph[a]:
             self.graph[a].append(b)
 
+    def randomGraph(self, d: float):
+        n = self.n
+        m = int(d * n * (n-1))
+        edges_added = 0
+
+        while edges_added < m:
+            v1 = random.randint(0, n-1)
+            v2 = random.randint(0, n-1)
+
+            # якщо ребро вже існує, пропускаємо
+            if v2 in self.graph[v1]:
+                continue
+
+            self.addEdge(v1, v2)
+            edges_added += 1
+
+        return self.graph
+
+    def visualise(self):
+        graph_visualisation = nx.DiGraph()
+        for edge_from in range(self.n):
+            for edge_to in self.graph[edge_from]:
+                graph_visualisation.add_edge(edge_from, edge_to)
+        nx.draw_networkx(graph_visualisation)
+        plt.show()
 
     # Get amount of strongly connected components, and if don't know it yet, find it
     def getSccompCount(self) -> int:
@@ -37,10 +66,10 @@ class GraphList:
     def getSccomp(self) -> dict:
         nodes = {}
         for i in range(n):
-            if low[i] in nodes:
-                nodes[low[i]].append(i)
+            if self.low[i] in nodes:
+                nodes[self.low[i]].append(i)
             else:
-                nodes.update({low[i]: [i]})
+                nodes.update({self.low[i]: [i]})
         return nodes
 
     def findSccomp(self) -> int:
@@ -82,24 +111,6 @@ class GraphList:
 
         return self.low[cur]
 
-     def randomGraph(self, d: float):
-        n = self.n
-        m = int(d * n * (n-1))
-        edges_added = 0
-
-        while edges_added < m:
-            v1 = random.randint(0, n-1)
-            v2 = random.randint(0, n-1)  
-
-            # якщо ребро вже існує, пропускаємо
-            if v2 in self.graph[v1]:
-                continue
-
-            self.addEdge(v1, v2)
-            edges_added += 1
-
-        return self.graph
-
 
 # graph[0][1] = bool --- взяти edge від першої ноди графа і до другої ноди графа
 # Якщо цей edge існує - True, інакше False
@@ -121,6 +132,33 @@ class GraphMatrix:
     def addEdge(self, a: int, b: int):
         self.graph[a][b] = True
 
+    def randomGraph(self, d: float):
+        n = self.n
+        m = int(d * n * (n-1))
+        edges_added = 0
+
+        while edges_added < m:
+            v1 = random.randint(0, n-1)
+            v2 = random.randint(0, n-1)
+
+            # якщо ребро вже існує, пропускаємо
+            if self.graph[v1][v2] == True:
+                continue
+
+            self.addEdge(v1, v2)
+            edges_added += 1
+
+        return self.graph
+
+    def visualise(self):
+        graph_visualisation = nx.DiGraph()
+        for edge_from in range(self.n):
+            for edge_to in range(self.n):
+                if self.graph[edge_from][edge_to] == True:
+                    graph_visualisation.add_edge(edge_from, edge_to)
+        nx.draw_networkx(graph_visualisation)
+        plt.show()
+
 
     # Get amount of strongly connected components, and if don't know it yet, find it
     def getSccompCount(self) -> int:
@@ -133,10 +171,10 @@ class GraphMatrix:
     def getSccomp(self) -> dict:
         nodes = {}
         for i in range(n):
-            if low[i] in nodes:
+            if self.low[i] in nodes:
                 nodes[low[i]].append(i)
             else:
-                nodes.update({low[i]: [i]})
+                nodes.update({self.low[i]: [i]})
         return nodes
 
     def findSccomp(self) -> int:
@@ -182,10 +220,11 @@ class GraphMatrix:
         return self.low[cur]
 
 
-# ? Створити окремо randomGraph для різних класів, але це вже далі по імплементації видно буде ?
 # міні-тест
 graph = GraphList(3)
 graph.randomGraph(0.58)
 print("Рандомний граф: ")
 for i, neighbors in enumerate(graph.graph):
     print(f"{i} - {neighbors}")
+
+graph.visualise()
