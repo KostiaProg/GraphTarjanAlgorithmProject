@@ -186,8 +186,12 @@ class GraphMatrix:
 
 # ? Створити окремо randomGraph для різних класів, але це вже далі по імплементації видно буде ?
 # міні-тест
-graph = GraphList(3)
-graph.randomGraph(0.58)
-print("Рандомний граф: ")
-for i, neighbors in enumerate(graph.graph):
-    print(f"{i} - {neighbors}")
+def short_examlpe():
+    graph = GraphList(3)
+    graph.randomGraph(0.58)
+    print("Рандомний граф: ")
+    for i, neighbors in enumerate(graph.graph):
+        print(f"{i} - {neighbors}")
+
+if __name__ == "__main__":
+    short_examlpe()
