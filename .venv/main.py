@@ -82,6 +82,24 @@ class GraphList:
 
         return self.low[cur]
 
+     def randomGraph(self, d: float):
+        n = self.n
+        m = int(d * n * (n-1))
+        edges_added = 0
+
+        while edges_added < m:
+            v1 = random.randint(0, n-1)
+            v2 = random.randint(0, n-1)  
+
+            # якщо ребро вже існує, пропускаємо
+            if v2 in self.graph[v1]:
+                continue
+
+            self.addEdge(v1, v2)
+            edges_added += 1
+
+        return self.graph
+
 
 # graph[0][1] = bool --- взяти edge від першої ноди графа і до другої ноди графа
 # Якщо цей edge існує - True, інакше False
@@ -165,6 +183,9 @@ class GraphMatrix:
 
 
 # ? Створити окремо randomGraph для різних класів, але це вже далі по імплементації видно буде ?
-def randomGraph(n: int, d: int):
-    pass
-    # Creates random graph with n nodes and density d
+# міні-тест
+graph = GraphList(3)
+graph.randomGraph(0.58)
+print("Рандомний граф: ")
+for i, neighbors in enumerate(graph.graph):
+    print(f"{i} - {neighbors}")
