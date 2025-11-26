@@ -1,3 +1,5 @@
+import random
+
 '''
 ЩО ТРЕБА ЩЕ ЗРОБИТИ
 Найближчим часом:
@@ -36,15 +38,15 @@ class GraphList:
     # Returns dict where key - lowlink value, value - all strongly connected nodes with this lowlink value
     def getSccomp(self) -> dict:
         nodes = {}
-        for i in range(n):
-            if low[i] in nodes:
-                nodes[low[i]].append(i)
+        for i in range(self.n):
+            if self.low[i] in nodes:
+                nodes[self.low[i]].append(i)
             else:
-                nodes.update({low[i]: [i]})
+                nodes.update({self.low[i]: [i]})
         return nodes
 
     def findSccomp(self) -> int:
-        for i in range(n):
+        for i in range(self.n):
             if self.visited[i] == False:
                 self.dfs(i)
         return self.sccomp_count
@@ -54,12 +56,12 @@ class GraphList:
     # returns lowlink value of this node
     def dfs(self, cur: int):
         if self.solved == True:
-            return low[cur]
+            return self.low[cur]
 
         self.on_stack[cur] = True
         self.stack.append(cur)
-        self.node_counter[cur] = counter
-        self.low[cur] = counter
+        self.node_counter[cur] = self.counter
+        self.low[cur] = self.counter
         self.counter += 1
 
         # check all edges
@@ -82,7 +84,7 @@ class GraphList:
 
         return self.low[cur]
 
-     def randomGraph(self, d: float):
+    def randomGraph(self, d: float):
         n = self.n
         m = int(d * n * (n-1))
         edges_added = 0
@@ -132,15 +134,15 @@ class GraphMatrix:
      # Returns dict where key - lowlink value, value - all strongly connected nodes with this lowlink value
     def getSccomp(self) -> dict:
         nodes = {}
-        for i in range(n):
-            if low[i] in nodes:
-                nodes[low[i]].append(i)
+        for i in range(self.n):
+            if self.low[i] in nodes:
+                nodes[self.low[i]].append(i)
             else:
-                nodes.update({low[i]: [i]})
+                nodes.update({self.low[i]: [i]})
         return nodes
 
     def findSccomp(self) -> int:
-        for i in range(n):
+        for i in range(self.n):
             if self.visited[i] == False:
                 self.dfs(i)
         return self.sccomp_count
@@ -150,16 +152,16 @@ class GraphMatrix:
     # returns lowlink value of this node
     def dfs(self, cur: int):
         if self.solved == True:
-            return low[cur]
+            return self.low[cur]
 
         self.on_stack[cur] = True
         self.stack.append(cur)
-        self.node_counter[cur] = counter
-        self.low[cur] = counter
+        self.node_counter[cur] = self.counter
+        self.low[cur] = self.counter
         self.counter += 1
 
         # check all edges
-        for i in range(n):
+        for i in range(self.n):
             if self.graph[cur][i] == False:
                 continue
 
