@@ -72,14 +72,14 @@ class Graph:
     # Get amount of strongly connected components, and if don't know it yet, find it
     def getSccompCount(self) -> int:
         if self.solved == True:
-            return self.sccomp
+            return self.sccomp_count
         else:
             return self.findSccomp()
 
     # Returns dict where key - lowlink value, value - all strongly connected nodes with this lowlink value
     def getSccomp(self) -> dict:
         nodes = {}
-        for i in range(n):
+        for i in range(self.n):
             if self.low[i] in nodes:
                 nodes[self.low[i]].append(i)
             else:
@@ -87,8 +87,8 @@ class Graph:
         return nodes
 
     def findSccomp(self) -> int:
-        for i in range(n):
-            if self.node_counter[it] == -1:
+        for i in range(self.n):
+            if self.node_counter[i] == -1:
                 self.dfs(i)
         return self.sccomp_count
 
@@ -148,12 +148,12 @@ class GraphList(Graph):
     # returns lowlink value of this node
     def dfs(self, cur: int):
         if self.solved == True:
-            return low[cur]
+            return self.low[cur]
 
         self.on_stack[cur] = True
         self.stack.append(cur)
-        self.node_counter[cur] = counter
-        self.low[cur] = counter
+        self.node_counter[cur] = self.counter
+        self.low[cur] = self.counter
         self.counter += 1
 
         # check all edges
@@ -232,16 +232,16 @@ class GraphMatrix(Graph):
     # returns lowlink value of this node
     def dfs(self, cur: int):
         if self.solved == True:
-            return low[cur]
+            return self.low[cur]
 
         self.on_stack[cur] = True
         self.stack.append(cur)
-        self.node_counter[cur] = counter
-        self.low[cur] = counter
+        self.node_counter[cur] = self.counter
+        self.low[cur] = self.counter
         self.counter += 1
 
         # check all edges
-        for i in range(n):
+        for i in range(self.n):
             if self.graph[cur][i] == False:
                 continue
 
@@ -264,11 +264,14 @@ class GraphMatrix(Graph):
         return self.low[cur]
 
 
-# міні-тест
-graph = GraphList(3)
-graph.randomGraph(0.58)
-print("Рандомний граф: ")
-for i, neighbors in enumerate(graph.graph):
-    print(f"{i} - {neighbors}")
+def test_1():
+    graph = GraphList(10)
+    graph.randomGraph(0.58)
+    print("Рандомний граф: ")
+    for i, neighbors in enumerate(graph.graph):
+        print(f"{i} - {neighbors}")
 
-graph.visualise()
+    graph.visualise()
+
+if __name__ == "__main__":
+    test_1()
