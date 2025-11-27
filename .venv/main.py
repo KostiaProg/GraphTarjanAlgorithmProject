@@ -49,8 +49,7 @@ class Graph:
     # static version of this algo, to create without a graph instance
     @staticmethod
     def static_randomGraph(n: int, d: float, graph_type: "Graph" = None) -> "Graph":
-        if graph_type is None:
-            graph_type = GraphList
+        if graph_type is None: graph_type = GraphList
         graph = graph_type(n)
         m = int(d * n * (n - 1))
         edges_added = 0
