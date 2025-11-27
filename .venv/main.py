@@ -66,6 +66,22 @@ class Graph:
             edges_added += 1
 
         return graph
+    
+    def fromMatricsForm(self, graph: "GraphMatrix"):
+        if self.n != graph.n: raise "different dimensions"
+        for n, ls in enumerate(graph.graph):
+            for i, isExist in enumerate(ls):
+                if isExist: self.addEdge(n, i)
+
+    def fromListForm(self, graph: "GraphList"):
+        if self.n != graph.n: raise "different dimensions"
+        for n, ls in enumerate(graph.graph):
+            for i in ls:
+                self.addEdge(n, i)
+
+    def fromAther(self, graph: "Graph"):
+        if isinstance(graph, GraphMatrix): self.fromMatricsForm(graph)
+        elif isinstance(graph, GraphList): self.fromListForm(graph)
 
     def visualise(self):
         pass # being overdriven
@@ -276,5 +292,8 @@ def test_1():
     graph.visualise()
 
 if __name__ == "__main__":
-    graph = Graph.static_randomGraph(10, 0.2, GraphList)
+    graph = Graph.static_randomGraph(3, 0.5, GraphMatrix)
+    graphMat = GraphList(3)
+    graphMat.fromMatrixForm(graph)
     graph.visualise()
+    graphMat.visualise()
