@@ -48,7 +48,9 @@ class Graph:
 
     # static version of this algo, to create without a graph instance
     @staticmethod
-    def static_randomGraph(n: int, d: float, graph_type: "Graph" = "GraphList"):
+    def static_randomGraph(n: int, d: float, graph_type: "Graph" = None) -> "Graph":
+        if graph_type is None:
+            graph_type = GraphList
         graph = graph_type(n)
         m = int(d * n * (n - 1))
         edges_added = 0
@@ -58,7 +60,7 @@ class Graph:
             v2 = random.randint(0, n - 1)
 
             # якщо ребро вже існує, пропускаємо
-            if graph.graph[v1][v2] == True:
+            if (graph_type is GraphMatrix and graph.graph[v1][v2] == True) or (graph_type is GraphList and v2 in graph.graph[v1]):
                 continue
 
             graph.addEdge(v1, v2)
@@ -182,6 +184,7 @@ class GraphList(Graph):
 class GraphMatrix(Graph):
     def __init__(self, n):
         super().__init__(n)
+        self.graph = [[False for __ in range(n) ] for _ in range(n)]
 
     def addEdge(self, a: int, b: int):
         self.graph[a][b] = True
@@ -274,4 +277,5 @@ def test_1():
     graph.visualise()
 
 if __name__ == "__main__":
-    test_1()
+    graph = Graph.static_randomGraph(10, 0.2, GraphList)
+    graph.visualise()
