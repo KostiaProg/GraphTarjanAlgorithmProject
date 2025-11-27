@@ -79,7 +79,7 @@ class Graph:
             for i in ls:
                 self.addEdge(n, i)
 
-    def fromAther(self, graph: "Graph"):
+    def fromOther(self, graph: "Graph"):
         if isinstance(graph, GraphMatrix): self.fromMatricsForm(graph)
         elif isinstance(graph, GraphList): self.fromListForm(graph)
 
@@ -292,8 +292,24 @@ def test_1():
     graph.visualise()
 
 if __name__ == "__main__":
-    graph = Graph.static_randomGraph(3, 0.5, GraphMatrix)
-    graphMat = GraphList(3)
-    graphMat.fromMatrixForm(graph)
+    graph = GraphMatrix(8)
+    graph.addEdge(0, 1)
+    graph.addEdge(1, 2)
+    graph.addEdge(2, 0)
+    graph.addEdge(3, 1)
+    graph.addEdge(3, 2)
+    graph.addEdge(0, 1)
+    graph.addEdge(3, 4)
+    graph.addEdge(4, 3)
+    graph.addEdge(0, 1)
+    graph.addEdge(4, 5)
+    graph.addEdge(5, 6)
+    graph.addEdge(6, 5)
+    graph.addEdge(7, 6)
+    graph.addEdge(7, 4)
+    graph.addEdge(7, 7)
+    
+    print(graph.getSccompCount())
+    print(graph.getSccomp())
     graph.visualise()
-    graphMat.visualise()
+    
