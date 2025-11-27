@@ -49,11 +49,40 @@ class GraphList:
 
     def visualise(self):
         graph_visualisation = nx.DiGraph()
+
         for edge_from in range(self.n):
+            # lonely node - just put it without edges
+            if not self.graph[edge_from]:
+                edge_name = edge_from
+                if self.solved == True:
+                    edge_name += f" Group {self.low[edge_from]}"
+
+                graph_visualisation.add_node(edge_from)
+
             for edge_to in self.graph[edge_from]:
-                graph_visualisation.add_edge(edge_from, edge_to)
-        nx.draw_networkx(graph_visualisation)
+                if self.solved == True:
+                    # if the compononents are SC, they are all connected with GREEN edges, but if they are in different groups, the edge is RED
+                    edge_color = 'green'
+                    if self.low[edge_from] != self.low[edge_to]:
+                        edge_color = 'red'
+
+                    # Add labels with SCC group numbers
+                    graph_visualisation.add_edge(edge_from + f" Group {self.low[edge_from]}", edge_to + f" Group {self.low[edge_to]}", color=edge_color)
+
+                    graph_visualisation.nodes[edge_from]['group'] = str(self.low[edge_from])
+                    graph_visualisation.nodes[edge_to]['group'] = str(self.low[edge_to])
+                else:
+                    # if we haven't tested the graph for SCC, then all edges are BLACK
+                    graph_visualisation.add_edge(edge_from, edge_to)
+
+        # Get the edge colors data to draw with them if we have performed SCC algo
+        if self.solved == True:
+            edge_colors = [graph_visualisation[edge_from][edge_to]['color'] for edge_from, edge_to in graph_visualisation.edges()]
+            nx.draw_networkx(graph_visualisation, edge_color=edge_colors)
+        else:
+            nx.draw_networkx(graph_visualisation)
         plt.show()
+
 
     # Get amount of strongly connected components, and if don't know it yet, find it
     def getSccompCount(self) -> int:
@@ -152,11 +181,43 @@ class GraphMatrix:
 
     def visualise(self):
         graph_visualisation = nx.DiGraph()
+
         for edge_from in range(self.n):
+            added = False
             for edge_to in range(self.n):
                 if self.graph[edge_from][edge_to] == True:
-                    graph_visualisation.add_edge(edge_from, edge_to)
-        nx.draw_networkx(graph_visualisation)
+                    added = True
+                    if self.solved == True:
+                        # if the compononents are SC, they are all connected with GREEN edges, but if they are in different groups, the edge is RED
+                        edge_color = 'green'
+                        if self.low[edge_from] != self.low[edge_to]:
+                            edge_color = 'red'
+
+                        # Add labels with SCC group numbers
+                        graph_visualisation.add_edge(edge_from + f" Group {self.low[edge_from]}",
+                                                     edge_to + f" Group {self.low[edge_to]}", color=edge_color)
+
+                        graph_visualisation.nodes[edge_from]['group'] = str(self.low[edge_from])
+                        graph_visualisation.nodes[edge_to]['group'] = str(self.low[edge_to])
+                    else:
+                        # if we haven't tested the graph for SCC, then all edges are BLACK
+                        graph_visualisation.add_edge(edge_from, edge_to)
+
+            # lonely node - just put it without edges
+            if added == False:
+                edge_name = edge_from
+                if self.solved == True:
+                    edge_name += f" Group {self.low[edge_from]}"
+
+                graph_visualisation.add_node(edge_from)
+
+
+        # Get the edge colors data to draw with them if we have performed SCC algo
+        if self.solved == True:
+            edge_colors = [graph_visualisation[edge_from][edge_to]['color'] for edge_from, edge_to in graph_visualisation.edges()]
+            nx.draw_networkx(graph_visualisation, edge_color=edge_colors)
+        else:
+            nx.draw_networkx(graph_visualisation)
         plt.show()
 
 
