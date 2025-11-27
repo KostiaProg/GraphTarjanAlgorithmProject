@@ -107,6 +107,7 @@ class Graph:
         for i in range(self.n):
             if self.node_counter[i] == -1:
                 self.dfs(i)
+        self.solved = True
         return self.sccomp_count
 
 
@@ -136,6 +137,7 @@ class GraphList(Graph):
 
                 graph_visualisation.add_node(edge_from)
 
+            
             for edge_to in self.graph[edge_from]:
                 if self.solved == True:
                     # if the compononents are SC, they are all connected with GREEN edges, but if they are in different groups, the edge is RED
@@ -144,10 +146,13 @@ class GraphList(Graph):
                         edge_color = 'red'
 
                     # Add labels with SCC group numbers
-                    graph_visualisation.add_edge(str(edge_from) + f" Group {self.low[edge_from]}", str(edge_to) + f" Group {self.low[edge_to]}", color=edge_color)
+                    str_edge_from = str(edge_from) + f" Group {self.low[edge_from]}"
+                    str_edge_to = str(edge_to) + f" Group {self.low[edge_to]}"
+                    
+                    graph_visualisation.add_edge(str_edge_from, str_edge_to, color=edge_color)
 
-                    graph_visualisation.nodes[edge_from]['group'] = str(self.low[edge_from])
-                    graph_visualisation.nodes[edge_to]['group'] = str(self.low[edge_to])
+                    graph_visualisation.nodes[str_edge_from]['group'] = str(self.low[edge_from])
+                    graph_visualisation.nodes[str_edge_to]['group'] = str(self.low[edge_to])
                 else:
                     # if we haven't tested the graph for SCC, then all edges are BLACK
                     graph_visualisation.add_edge(edge_from, edge_to)
@@ -220,10 +225,14 @@ class GraphMatrix(Graph):
                             edge_color = 'red'
 
                         # Add labels with SCC group numbers
-                        graph_visualisation.add_edge(str(edge_from) + f" Group {self.low[edge_from]}", str(edge_to) + f" Group {self.low[edge_to]}", color=edge_color)
+                       
+                        str_edge_from = str(edge_from) + f" Group {self.low[edge_from]}"
+                        str_edge_to = str(edge_to) + f" Group {self.low[edge_to]}"
+                        
+                        graph_visualisation.add_edge(str_edge_from, str_edge_to, color=edge_color)
 
-                        graph_visualisation.nodes[edge_from]['group'] = str(self.low[edge_from])
-                        graph_visualisation.nodes[edge_to]['group'] = str(self.low[edge_to])
+                        graph_visualisation.nodes[str_edge_from]['group'] = str(self.low[edge_from])
+                        graph_visualisation.nodes[str_edge_to]['group'] = str(self.low[edge_to])
                     else:
                         # if we haven't tested the graph for SCC, then all edges are BLACK
                         graph_visualisation.add_edge(edge_from, edge_to)
@@ -292,24 +301,24 @@ def test_1():
     graph.visualise()
 
 if __name__ == "__main__":
-    graph = GraphMatrix(8)
-    graph.addEdge(0, 1)
-    graph.addEdge(1, 2)
-    graph.addEdge(2, 0)
-    graph.addEdge(3, 1)
-    graph.addEdge(3, 2)
-    graph.addEdge(0, 1)
-    graph.addEdge(3, 4)
-    graph.addEdge(4, 3)
-    graph.addEdge(0, 1)
-    graph.addEdge(4, 5)
-    graph.addEdge(5, 6)
-    graph.addEdge(6, 5)
-    graph.addEdge(7, 6)
-    graph.addEdge(7, 4)
-    graph.addEdge(7, 7)
+    graph = GraphMatrix(10)
+#    graph.addEdge(0, 1)
+#    graph.addEdge(1, 2)
+#    graph.addEdge(2, 0)
+#    graph.addEdge(3, 1)
+#    graph.addEdge(3, 2)
+#    graph.addEdge(0, 1)
+#    graph.addEdge(3, 4)
+#    graph.addEdge(4, 3)
+#    graph.addEdge(0, 1)
+#    graph.addEdge(4, 5)
+#    graph.addEdge(5, 6)
+#    graph.addEdge(6, 5)
+#    graph.addEdge(7, 6)
+#    graph.addEdge(7, 4)
+#    graph.addEdge(7, 7)
+    graph.randomGraph(0.1)
     
     print(graph.getSccompCount())
     print(graph.getSccomp())
     graph.visualise()
-    
