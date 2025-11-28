@@ -52,22 +52,9 @@ class Graph:
     def static_randomGraph(n: int, d: float, graph_type: "Graph" = None) -> "Graph":
         if graph_type is None: graph_type = GraphList # може і костиль, але іншого виходу небуло
         graph = graph_type(n)
-        m = int(d * n * (n - 1))
-        edges_added = 0
+        return graph.randomGraph(n)
 
-        while edges_added < m:
-            v1 = random.randint(0, n - 1)
-            v2 = random.randint(0, n - 1)
 
-            # якщо ребро вже існує, пропускаємо
-            if (graph_type is GraphMatrix and graph.graph[v1][v2] == True) or (graph_type is GraphList and v2 in graph.graph[v1]):
-                continue
-
-            graph.addEdge(v1, v2)
-            edges_added += 1
-
-        return graph
-    
     def fromMatricsForm(self, graph: "GraphMatrix"):
         if self.n != graph.n: raise "different dimensions"
         for n, ls in enumerate(graph.graph):
