@@ -14,6 +14,7 @@ class Graph:
     def __init__(self, n):
         self.graph = [[] for _ in range(n)]
         self.n = n # size
+        self._node_size = 1250 # node visualisation size
 
         self.stack = []
         self.on_stack = [False for _ in range(n)] # bitmap
@@ -51,22 +52,9 @@ class Graph:
     def static_randomGraph(n: int, d: float, graph_type: "Graph" = None) -> "Graph":
         if graph_type is None: graph_type = GraphList # може і костиль, але іншого виходу небуло
         graph = graph_type(n)
-        m = int(d * n * (n - 1))
-        edges_added = 0
+        return graph.randomGraph(n)
 
-        while edges_added < m:
-            v1 = random.randint(0, n - 1)
-            v2 = random.randint(0, n - 1)
 
-            # якщо ребро вже існує, пропускаємо
-            if (graph_type is GraphMatrix and graph.graph[v1][v2] == True) or (graph_type is GraphList and v2 in graph.graph[v1]):
-                continue
-
-            graph.addEdge(v1, v2)
-            edges_added += 1
-
-        return graph
-    
     def fromMatricsForm(self, graph: "GraphMatrix"):
         if self.n != graph.n: raise "different dimensions"
         for n, ls in enumerate(graph.graph):
@@ -133,7 +121,7 @@ class GraphList(Graph):
             if not self.graph[edge_from]:
                 edge_name = str(edge_from)
                 if self.solved == True:
-                    edge_name += f" Group {self.low[edge_from]}"
+                    edge_name += f" Gr {self.low[edge_from]}"
 
                 graph_visualisation.add_node(edge_from)
 
@@ -146,8 +134,8 @@ class GraphList(Graph):
                         edge_color = 'red'
 
                     # Add labels with SCC group numbers
-                    str_edge_from = str(edge_from) + f" Group {self.low[edge_from]}"
-                    str_edge_to = str(edge_to) + f" Group {self.low[edge_to]}"
+                    str_edge_from = str(edge_from) + f" Gr {self.low[edge_from]}"
+                    str_edge_to = str(edge_to) + f" Gr {self.low[edge_to]}"
                     
                     graph_visualisation.add_edge(str_edge_from, str_edge_to, color=edge_color)
 
@@ -158,11 +146,12 @@ class GraphList(Graph):
                     graph_visualisation.add_edge(edge_from, edge_to)
 
         # Get the edge colors data to draw with them if we have performed SCC algo
+        pos = nx.shell_layout(graph_visualisation)
         if self.solved == True:
             edge_colors = [graph_visualisation[edge_from][edge_to]['color'] for edge_from, edge_to in graph_visualisation.edges()]
-            nx.draw_networkx(graph_visualisation, edge_color=edge_colors)
+            nx.draw_networkx(graph_visualisation, pos, edge_color=edge_colors, node_size=self._node_size)
         else:
-            nx.draw_networkx(graph_visualisation)
+            nx.draw_networkx(graph_visualisation, pos, node_size=self._node_size)
         plt.show()
 
 
@@ -226,8 +215,8 @@ class GraphMatrix(Graph):
 
                         # Add labels with SCC group numbers
                        
-                        str_edge_from = str(edge_from) + f" Group {self.low[edge_from]}"
-                        str_edge_to = str(edge_to) + f" Group {self.low[edge_to]}"
+                        str_edge_from = str(edge_from) + f" Gr {self.low[edge_from]}"
+                        str_edge_to = str(edge_to) + f" Gr {self.low[edge_to]}"
                         
                         graph_visualisation.add_edge(str_edge_from, str_edge_to, color=edge_color)
 
@@ -241,17 +230,18 @@ class GraphMatrix(Graph):
             if added == False:
                 edge_name = str(edge_from)
                 if self.solved == True:
-                    edge_name += f" Group {self.low[edge_from]}"
+                    edge_name += f" Gr {self.low[edge_from]}"
 
                 graph_visualisation.add_node(edge_from)
 
 
         # Get the edge colors data to draw with them if we have performed SCC algo
+        pos = nx.shell_layout(graph_visualisation)
         if self.solved == True:
             edge_colors = [graph_visualisation[edge_from][edge_to]['color'] for edge_from, edge_to in graph_visualisation.edges()]
-            nx.draw_networkx(graph_visualisation, edge_color=edge_colors)
+            nx.draw_networkx(graph_visualisation, pos, edge_color=edge_colors, node_size=self._node_size)
         else:
-            nx.draw_networkx(graph_visualisation)
+            nx.draw_networkx(graph_visualisation, pos, node_size=self._node_size)
         plt.show()
 
 
