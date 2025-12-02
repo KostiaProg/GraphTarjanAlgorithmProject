@@ -1,9 +1,7 @@
 '''
 ЩО ТРЕБА ЩЕ ЗРОБИТИ
 Найближчим часом:
-1) ЕКСПЕРИМЕНТИ
-2) Як буде натхення якось об'єднати ці два класи в один, або зробити їх дітьми якогось загального класу Graph
-3) Засунути randomGraph() функцію за межі класу, або зробити її статичною
+ЕКСПЕРИМЕНТИ
 '''
 
 import networkx as nx
@@ -78,11 +76,13 @@ class Graph:
     def getSccompCount(self) -> int:
         if self.solved == True:
             return self.sccomp_count
-        else:
-            return self.findSccomp()
+        return self.findSccomp()
 
     # Returns dict where key - lowlink value, value - all strongly connected nodes with this lowlink value
     def getSccomp(self) -> dict:
+        if self.solved == False:
+            self.findSccomp()
+
         nodes = {}
         for i in range(self.n):
             if self.low[i] in nodes:
