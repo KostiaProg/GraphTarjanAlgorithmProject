@@ -170,7 +170,7 @@ class GraphList(Graph):
         # check all edges
         for it in self.graph[cur]:
             if self.node_counter[it] == -1:
-                self.low[cur] = min(self.low[cur], self.dfs(it))
+                self.dfs(it)
             if self.on_stack[it] == True:
                 self.low[cur] = min(self.low[cur], self.low[it])
 
@@ -180,6 +180,7 @@ class GraphList(Graph):
             last_el = self.stack.pop()
             while cur != last_el:
                 self.on_stack[last_el] = False
+                self.low[last_el] = self.low[cur]
                 last_el = self.stack.pop()
 
             self.on_stack[cur] = False
