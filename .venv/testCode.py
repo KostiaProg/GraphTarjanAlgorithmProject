@@ -1,4 +1,3 @@
-import tracemalloc
 import time
 
 class TimeTester:
@@ -14,6 +13,7 @@ class TimeTester:
         elif isinstance(args, dict): kw_args  = args
 
         start = time.time()
+        
         result = self.func(*pos_args, **kw_args) # виконання ф-ції
 
         self.times.append(time.time() - start)
@@ -25,7 +25,6 @@ class TimeTester:
 
     def setFunc(self, func):
         self.func = func
-        self.reset()
 
 def test():
     def something(n):

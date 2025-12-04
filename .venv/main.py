@@ -50,7 +50,8 @@ class Graph:
     def static_randomGraph(n: int, d: float, graph_type: "Graph" = None) -> "Graph":
         if graph_type is None: graph_type = GraphList # може і костиль, але іншого виходу небуло
         graph = graph_type(n)
-        return graph.randomGraph(n)
+        graph.randomGraph(d)
+        return graph
 
 
     def fromMatricsForm(self, graph: "GraphMatrix"):
