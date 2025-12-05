@@ -42,6 +42,9 @@ for (v, d, l_graphs) , (v, d, m_graphs) in zip(list_graphs, matrix_graphs):
         tester.setFunc(m_graph.findSccomp)
         tester.test()
     m_results[f"{(v , d)}"] = (tester.times, tester.outputs)
+    
+    tester.reset()
+
 
 with open(".venv/data.json", 'w') as file:
     json.dump((l_results, m_results), file)
